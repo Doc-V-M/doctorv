@@ -1,17 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.lang = 'pt-BR';
-recognition.start();
-
-recognition.onresult = function(event) {
-    const transcript = event.results[0][0].transcript;
-    userInput.value = transcript;
-};
-    function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
-    window.speechSynthesis.speak(utterance);
-}
     const chatBox = document.createElement('div');
     chatBox.style.width = '300px';
     chatBox.style.height = '400px';
@@ -44,6 +31,39 @@ recognition.onresult = function(event) {
             botResponse.textContent = `IA: (simulação) Estou com dificuldades em respirar.`;
             chatBox.appendChild(botResponse);
             chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Chama a função de voz após a resposta
+            speak(botResponse.textContent);
         }, 1000);
     });
+
+    // Função para usar Speech-to-Text
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'pt-BR';
+
+    // Quando o microfone captar o que você disser, ele coloca no input
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+    };
+
+    // Função para iniciar o reconhecimento de voz
+    const startVoiceInput = () => {
+        recognition.start();
+    };
+
+    // Função para falar as respostas da IA
+    function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pt-BR';
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Coloca um botão para ativar o reconhecimento de voz
+    const voiceButton = document.createElement('button');
+    voiceButton.textContent = 'Falar';
+    voiceButton.style.marginTop = '10px';
+    document.body.appendChild(voiceButton);
+
+    voiceButton.addEventListener('click', startVoiceInput);
 });
