@@ -3,15 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const casosClinicos = [
         {
             titulo: "Paciente com Dislipidemia Primária",
-            introducao: "Você está atendendo um paciente de 45 anos que veio para avaliação de rotina. Nos exames laboratoriais, foram encontrados níveis elevados de LDL e triglicerídeos.",
+            introducao: "Você está atendendo um paciente de 45 anos, sem sintomas aparentes. Em exames laboratoriais, observou-se LDL elevado (180 mg/dL) e triglicerídeos aumentados (250 mg/dL).",
             respostas: {
-                "quais são seus sintomas": "Não estou sentindo nada diferente, estou bem.",
-                "histórico familiar": "Meu pai teve infarto aos 52 anos e minha mãe tem diabetes.",
-                "você faz uso de medicamentos": "Não faço uso de medicamentos regularmente.",
-                "você pratica atividade física": "Muito pouco, só caminhadas ocasionais.",
-                "como está sua alimentação": "Como muita fritura e carnes gordurosas, pouca salada."
+                "sintomas": "Eu estou me sentindo bem, sem dores ou desconfortos.",
+                "histórico familiar": "Meu pai teve um infarto aos 52 anos e minha mãe tem diabetes.",
+                "medicação": "Não estou usando medicamentos atualmente.",
+                "atividade física": "Eu faço caminhadas leves, 1 a 2 vezes por semana.",
+                "alimentação": "Minha alimentação é ruim, como muita gordura e fast food.",
+                "alcool": "Bebo socialmente, umas duas vezes por semana.",
+                "tabagismo": "Não fumo."
             },
-            gabarito: "Você deveria orientar mudanças de estilo de vida (alimentação e exercícios), iniciar estatina de acordo com o risco cardiovascular e monitorar lipidograma."
+            gabarito: "Conduta esperada: Educação em saúde, mudanças no estilo de vida, considerar início de estatinas de acordo com o risco cardiovascular global."
         }
     ];
 
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Exibe a introdução do caso assim que abrir
     const casoIntro = document.createElement('div');
-    casoIntro.textContent = `Caso: ${casoAtual.titulo}\n${casoAtual.introducao}`;
+    casoIntro.textContent = `🩺 Caso: ${casoAtual.titulo}\n\n📄 Introdução: ${casoAtual.introducao}`;
     chatBox.appendChild(casoIntro);
     speak(casoIntro.textContent);
 
@@ -59,10 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         userInput.value = '';
 
         // Verifica se a pergunta existe nas respostas
-        let resposta = "Não entendi, poderia repetir?";
-        for (let pergunta in casoAtual.respostas) {
-            if (userText.includes(pergunta)) {
-                resposta = casoAtual.respostas[pergunta];
+        let resposta = "Não entendi, poderia reformular sua pergunta?";
+        for (let chave in casoAtual.respostas) {
+            if (userText.includes(chave)) {
+                resposta = casoAtual.respostas[chave];
                 break;
             }
         }
