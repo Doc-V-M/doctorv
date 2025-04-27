@@ -3,59 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor V</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        #chat-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        #chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        .message {
-            margin-bottom: 15px;
-        }
-        #user-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        #send-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #send-btn:hover {
-            background-color: #218838;
-        }
-    </style>
+    <title>Doctor V - Estudo Revalida</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 </head>
 <body>
-    <div id="chat-container">
-        <div id="chat-messages">
-            <div class="message"><strong>Simulação:</strong> Caso Clínico de Dislipidemia</div>
-            <div class="message">Inicie a interação com seu paciente.</div>
+    <header>
+        <h1>Doctor V - Estudo para Revalida</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#interacao">Interação com IA</a></li>
+            <li><a href="#cronograma">Cronograma de Estudos</a></li>
+            <li><a href="#links">Links e Arquivos</a></li>
+        </ul>
+    </nav>
+
+    <section id="interacao">
+        <h2>Simulação: Caso Clínico</h2>
+        <p>Inicie a interação com seu paciente abaixo:</p>
+        <div id="chatbox" class="cmd-box">
+            <p>Digite ou fale sua pergunta...</p>
+            <input type="text" id="inputText" placeholder="Digite sua pergunta">
+            <button onclick="sendMessage()">Enviar</button>
         </div>
-        <input type="text" id="user-input" placeholder="Digite sua pergunta..." />
-        <button id="send-btn" onclick="sendMessage()">Enviar</button>
-    </div>
+    </section>
+
+    <section id="cronograma">
+        <h2>Cronograma de Estudos</h2>
+        <p>Personalize seu cronograma de estudos abaixo:</p>
+        <div id="cronograma-content">
+            <p>Você pode adicionar suas metas de estudo, e a IA sugere um plano.</p>
+        </div>
+    </section>
+
+    <section id="links">
+        <h2>Links e Arquivos úteis</h2>
+        <ul>
+            <li><a href="https://www.saude.gov.br/">Ministério da Saúde</a></li>
+            <li><a href="https://www.estrategiamed.com.br/">Estratégia Med</a></li>
+            <li><a href="https://www.hardworkmedicina.com.br/">Hardwork Medicina</a></li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>Desenvolvido por Doctor V</p>
+    </footer>
+
     <script src="chat.js"></script>
 </body>
 </html>
