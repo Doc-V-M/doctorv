@@ -16,7 +16,7 @@ async function sendMessage() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                inputs: `Imagine que você é um paciente com dislipidemia (colesterol e triglicérides altos). Eu sou o médico e vou fazer perguntas para realizar o atendimento clínico. Responda como um paciente real. Minha pergunta é: ${userInput}`
+                inputs: `Imagine que você é um paciente com dislipidemia (colesterol e triglicérides altos). Eu sou o médico e vou fazer perguntas para realizar o atendimento clínico. Você deve responder de forma realista e com base nas condições de saúde de um paciente com dislipidemia. Responda como um paciente. Minha pergunta é: ${userInput}`
             })
         });
 
