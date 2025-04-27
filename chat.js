@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'pt-BR';
+recognition.start();
+
+recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    userInput.value = transcript;
+};
+    function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'pt-BR';
+    window.speechSynthesis.speak(utterance);
+}
     const chatBox = document.createElement('div');
     chatBox.style.width = '300px';
     chatBox.style.height = '400px';
