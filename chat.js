@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Função para usar Speech-to-Text
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'pt-BR';
-
+    
     recognition.onstart = function() {
         console.log("O microfone está ouvindo...");
     };
@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         userInput.value = transcript;
+
+        // Envia automaticamente após o reconhecimento de fala
+        submitButton.click();
     };
 
     recognition.onerror = function(event) {
@@ -59,10 +62,23 @@ document.addEventListener('DOMContentLoaded', function() {
         recognition.start();
     };
 
-    // Função para falar as respostas da IA
+    // Função para falar as respostas da IA de forma mais natural
     function speak(text) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'pt-BR';
+        
+        // Ajuste da voz para somar mais naturalidade
+        utterance.rate = 1;  // Taxa de fala
+        utterance.pitch = 1; // Tom
+        utterance.volume = 1; // Volume (1 é o máximo)
+        
+        // Opcional: escolher uma voz mais natural, se disponível
+        const voices = window.speechSynthesis.getVoices();
+        const selectedVoice = voices.find(voice => voice.name === "Google português do Brasil"); // Alterar se preferir outra
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
         window.speechSynthesis.speak(utterance);
     }
 
