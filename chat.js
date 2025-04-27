@@ -1,111 +1,46 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Lista de Casos Clínicos
-    const casosClinicos = [
-        {
-            titulo: "Paciente com Dislipidemia Primária",
-            introducao: "Você está atendendo um paciente de 45 anos, sem sintomas aparentes. Em exames laboratoriais, observou-se LDL elevado (180 mg/dL) e triglicerídeos aumentados (250 mg/dL).",
-            respostas: {
-                "sintomas": "Eu estou me sentindo bem, sem dores ou desconfortos.",
-                "histórico familiar": "Meu pai teve um infarto aos 52 anos e minha mãe tem diabetes.",
-                "medicação": "Não estou usando medicamentos atualmente.",
-                "atividade física": "Eu faço caminhadas leves, 1 a 2 vezes por semana.",
-                "alimentação": "Minha alimentação é ruim, como muita gordura e fast food.",
-                "alcool": "Bebo socialmente, umas duas vezes por semana.",
-                "tabagismo": "Não fumo."
-            },
-            gabarito: "Conduta esperada: Educação em saúde, mudanças no estilo de vida, considerar início de estatinas de acordo com o risco cardiovascular global."
-        }
-    ];
+// chat.js
 
-    // Sorteia um caso aleatório
-    const casoAtual = casosClinicos[Math.floor(Math.random() * casosClinicos.length)];
+// Coloque aqui o seu HuggingFace Access Token
+const HUGGINGFACE_TOKEN = 'SEU_TOKEN_AQUI';
 
-    const chatBox = document.createElement('div');
-    chatBox.style.width = '300px';
-    chatBox.style.height = '400px';
-    chatBox.style.border = '1px solid #ccc';
-    chatBox.style.padding = '10px';
-    chatBox.style.overflowY = 'scroll';
-    chatBox.style.backgroundColor = '#fff';
-    document.body.appendChild(chatBox);
+// Função para enviar mensagem do usuário e pegar resposta da IA
+async function sendMessage() {
+    const userInput = document.getElementById('user-input').value;
+    if (!userInput.trim()) return;
 
-    const userInput = document.createElement('input');
-    userInput.style.width = '100%';
-    userInput.style.marginTop = '10px';
-    document.body.appendChild(userInput);
+    // Exibe a mensagem do usuário na tela
+    addMessage('Você', userInput);
+    document.getElementById('user-input').value = '';
 
-    const submitButton = document.createElement('button');
-    submitButton.textContent = 'Enviar';
-    submitButton.style.marginTop = '10px';
-    document.body.appendChild(submitButton);
-
-    const voiceButton = document.createElement('button');
-    voiceButton.textContent = 'Falar';
-    voiceButton.style.marginTop = '10px';
-    document.body.appendChild(voiceButton);
-
-    document.body.appendChild(voiceButton);
-    document.body.appendChild(submitButton);
-
-    // Exibe a introdução do caso assim que abrir
-    const casoIntro = document.createElement('div');
-    casoIntro.textContent = `🩺 Caso: ${casoAtual.titulo}\n\n📄 Introdução: ${casoAtual.introducao}`;
-    chatBox.appendChild(casoIntro);
-    speak(casoIntro.textContent);
-
-    submitButton.addEventListener('click', function() {
-        const userText = userInput.value.toLowerCase();
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `Você: ${userInput.value}`;
-        chatBox.appendChild(messageElement);
-        userInput.value = '';
-
-        // Verifica se a pergunta existe nas respostas
-        let resposta = "Não entendi, poderia reformular sua pergunta?";
-        for (let chave in casoAtual.respostas) {
-            if (userText.includes(chave)) {
-                resposta = casoAtual.respostas[chave];
-                break;
-            }
-        }
-
-        const botResponse = document.createElement('div');
-        botResponse.textContent = `Paciente: ${resposta}`;
-        chatBox.appendChild(botResponse);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        speak(botResponse.textContent);
+    // Envia para o modelo Zephyr-7B
+    const response = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${HUGGINGFACE_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            inputs: `Imagine que você é um paciente com dislipidemia (colesterol e triglicérides altos). Eu sou o médico e vou fazer perguntas para realizar o atendimento clínico. Responda como um paciente real. Minha pergunta é: ${userInput}`
+        })
     });
 
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'pt-BR';
+    const data = await response.json();
 
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        userInput.value = transcript;
-        submitButton.click();
-    };
-
-    recognition.onerror = function(event) {
-        console.log("Erro no reconhecimento de voz:", event.error);
-    };
-
-    voiceButton.addEventListener('click', function() {
-        recognition.start();
-    });
-
-    function speak(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pt-BR';
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-
-        const voices = window.speechSynthesis.getVoices();
-        const selectedVoice = voices.find(voice => voice.name === "Google português do Brasil");
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
-
-        window.speechSynthesis.speak(utterance);
+    if (data.error) {
+        addMessage('Paciente', 'Desculpe, estou com dificuldades para responder agora.');
+        console.error(data.error);
+    } else {
+        const botResponse = data.generated_text || (data[0] && data[0].generated_text) || "Desculpe, não entendi.";
+        addMessage('Paciente', botResponse);
     }
-});
+}
+
+// Função para adicionar mensagens no chat
+function addMessage(sender, message) {
+    const chatContainer = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
