@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simulação de resposta da IA (Você pode substituir isso por uma API de IA depois)
         setTimeout(function() {
             const botResponse = document.createElement('div');
-            botResponse.textContent = `IA: (simulação) Estou com dificuldades em respirar.`;
+            botResponse.textContent = `IA: Estou com dificuldades em respirar.`;
             chatBox.appendChild(botResponse);
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -41,10 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'pt-BR';
 
-    // Quando o microfone captar o que você disser, ele coloca no input
+    recognition.onstart = function() {
+        console.log("O microfone está ouvindo...");
+    };
+
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         userInput.value = transcript;
+    };
+
+    recognition.onerror = function(event) {
+        console.log("Erro no reconhecimento de voz:", event.error);
     };
 
     // Função para iniciar o reconhecimento de voz
