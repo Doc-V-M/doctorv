@@ -1,21 +1,15 @@
-// chat.js
 
-// Usando variáveis de ambiente para segurança
-// Não deixe a chave no código diretamente
-require('dotenv').config();  // Carrega o .env
+require('dotenv').config();
 
-const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN;  // Obtém o token do arquivo .env
+const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN;
 
-// Função para enviar mensagem do usuário e pegar resposta da IA
 async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (!userInput.trim()) return;
 
-    // Exibe a mensagem do usuário na tela
     addMessage('Você', userInput);
     document.getElementById('user-input').value = '';
 
-    // Envia para o modelo Zephyr-7B
     const response = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
         method: 'POST',
         headers: {
@@ -38,7 +32,6 @@ async function sendMessage() {
     }
 }
 
-// Função para adicionar mensagens no chat
 function addMessage(sender, message) {
     const chatContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
