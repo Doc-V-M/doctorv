@@ -1,14 +1,15 @@
-
+// Carregar variáveis de ambiente
 require('dotenv').config();
 
 const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN;
 
+// Função para enviar a mensagem e obter a resposta
 async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (!userInput.trim()) return;
 
-    addMessage('Você', userInput);
-    document.getElementById('user-input').value = '';
+    addMessage('Você', userInput);  // Exibe a mensagem do usuário
+    document.getElementById('user-input').value = '';  // Limpa o campo de entrada
 
     const response = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
         method: 'POST',
@@ -28,15 +29,16 @@ async function sendMessage() {
         console.error(data.error);
     } else {
         const botResponse = data.generated_text || (data[0] && data[0].generated_text) || "Desculpe, não entendi.";
-        addMessage('Paciente', botResponse);
+        addMessage('Paciente', botResponse);  // Exibe a resposta da IA
     }
 }
 
+// Função para adicionar mensagens ao chat
 function addMessage(sender, message) {
     const chatContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
     chatContainer.appendChild(messageElement);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    chatContainer.scrollTop = chatContainer.scrollHeight;  // Rolagem automática
 }
