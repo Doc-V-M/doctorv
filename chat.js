@@ -1,16 +1,11 @@
-// Carregar variáveis de ambiente
-require('dotenv').config();
+// Chave de API diretamente no código (para fins de teste)
+const HUGGINGFACE_TOKEN = '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'; // Substitua pela sua chave de API
 
-// Substitua pela sua chave de API real
-const HUGGINGFACE_TOKEN = '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';
-
-
-// Função para enviar a mensagem e obter a resposta
 async function sendMessage() {
     const userInput = document.getElementById('user-input').value;
     if (!userInput.trim()) return;
 
-    addMessage('Você', userInput);  // Exibe a mensagem do usuário
+    addMessage('Você', userInput);
     document.getElementById('user-input').value = '';  // Limpa o campo de entrada
 
     const response = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
@@ -35,7 +30,6 @@ async function sendMessage() {
     }
 }
 
-// Função para adicionar mensagens ao chat
 function addMessage(sender, message) {
     const chatContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
