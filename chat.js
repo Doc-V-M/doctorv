@@ -1,7 +1,9 @@
 // Carregar variáveis de ambiente
 require('dotenv').config();
 
-const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN;
+// Substitua pela sua chave de API real
+const HUGGINGFACE_TOKEN = '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';
+
 
 // Função para enviar a mensagem e obter a resposta
 async function sendMessage() {
