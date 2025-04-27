@@ -1,4 +1,4 @@
-// A chave de API deve ser colocada diretamente no código. Por segurança, é melhor armazenar essa chave de forma segura.
+// A chave de API deve ser colocada diretamente no código.
 const HUGGINGFACE_TOKEN = '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'; // Substitua pela sua chave de API
 
 async function sendMessage() {
@@ -27,4 +27,21 @@ async function sendMessage() {
             addMessage('Paciente', 'Desculpe, estou com dificuldades para responder agora.');
             console.error(data.error);
         } else {
-            const botResponse = data.generated_text || (data[0] && data[0].generated_text) || "Des
+            const botResponse = data.generated_text || (data[0] && data[0].generated_text) || "Desculpe, não entendi.";
+            addMessage('Paciente', botResponse); // Exibe a resposta da IA
+        }
+    } catch (error) {
+        console.error('Erro na requisição à API:', error);
+        addMessage('Paciente', 'Houve um erro ao tentar responder.');
+    }
+}
+
+// Função para adicionar as mensagens ao chat
+function addMessage(sender, message) {
+    const chatContainer = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;  // Rolagem automática
+}
