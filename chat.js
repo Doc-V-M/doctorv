@@ -1,7 +1,10 @@
 // chat.js
 
-// Coloque aqui o seu HuggingFace Access Token
-const HUGGINGFACE_TOKEN = 'SEU_TOKEN_AQUI';
+// Usando variáveis de ambiente para segurança
+// Não deixe a chave no código diretamente
+require('dotenv').config();  // Carrega o .env
+
+const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN;  // Obtém o token do arquivo .env
 
 // Função para enviar mensagem do usuário e pegar resposta da IA
 async function sendMessage() {
